@@ -1,6 +1,5 @@
 #%% Libraries
 import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 import cv2
 from ultralytics import YOLO
