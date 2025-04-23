@@ -1,5 +1,6 @@
 #%% Libraries
 import platform
+import streamlit as st
 st.write(f"Python version: {platform.python_version()}")
 
 import os
@@ -7,7 +8,6 @@ import os
 import cv2
 from ultralytics import YOLO
 
-import streamlit as st
 import tempfile
 from Find_defect_streamlit import process_image
 
