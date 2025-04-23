@@ -1,4 +1,7 @@
 #%% Libraries
+import platform
+st.write(f"Python version: {platform.python_version()}")
+
 import os
 
 import cv2
