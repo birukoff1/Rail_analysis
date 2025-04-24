@@ -12,7 +12,19 @@ import tempfile
 from Find_defect_streamlit import process_image
 
 import torch
-from ultralytics.nn.tasks import DetectionModel
+import builtins
+
+# Save original torch.load
+_original_torch_load = torch.load
+
+def patched_torch_load(*args, **kwargs):
+    # Always force weights_only=False if not explicitly set
+    if 'weights_only' not in kwargs:
+        kwargs['weights_only'] = False
+    return _original_torch_load(*args, **kwargs)
+
+# Patch torch.load
+torch.load = patched_torch_load
 
 #%% Main
 st.title("Анализ рельсового покрытия")
@@ -80,7 +92,6 @@ if uploaded_file is not None and side is not None:
     
         Confidence = 0.7
         
-        torch.serialization.add_safe_globals([DetectionModel])
         model = YOLO('best.pt')
         Results = []
     
