@@ -11,6 +11,9 @@ from ultralytics import YOLO
 import tempfile
 from Find_defect_streamlit import process_image
 
+import torch
+from ultralytics.nn.tasks import DetectionModel
+
 #%% Main
 st.title("Анализ рельсового покрытия")
 
@@ -76,6 +79,8 @@ if uploaded_file is not None and side is not None:
         Images_for_YOLO = os.listdir(temp_images_for_YOLO)
     
         Confidence = 0.7
+        
+        torch.serialization.add_safe_globals([DetectionModel])
         model = YOLO('best.pt')
         Results = []
     
