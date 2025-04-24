@@ -66,7 +66,7 @@ if uploaded_file is not None and side is not None:
         st.info("Шаг 1 завершен!")
         
         cap.release()
-        cv2.destroyAllWindows()    
+        #cv2.destroyAllWindows()    
         
         
         #%% Analysis of the images by YOLO
