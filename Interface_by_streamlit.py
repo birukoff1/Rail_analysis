@@ -76,7 +76,7 @@ if uploaded_file is not None and side is not None:
         Images_for_YOLO = os.listdir(temp_images_for_YOLO)
     
         Confidence = 0.7
-        model = YOLO('weights/best.pt')
+        model = YOLO('best.pt')
         Results = []
     
         for image_path in Images_for_YOLO:
