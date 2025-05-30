@@ -1,13 +1,30 @@
 #%% Libraries
+import platform
+import streamlit as st
+st.write(f"Python version: {platform.python_version()}")
+
 import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 import cv2
 from ultralytics import YOLO
 
-import streamlit as st
 import tempfile
 from Find_defect_streamlit import process_image
+
+import torch
+import builtins
+
+# Save original torch.load
+_original_torch_load = torch.load
+
+def patched_torch_load(*args, **kwargs):
+    # Always force weights_only=False if not explicitly set
+    if 'weights_only' not in kwargs:
+        kwargs['weights_only'] = False
+    return _original_torch_load(*args, **kwargs)
+
+# Patch torch.load
+torch.load = patched_torch_load
 
 #%% Main
 st.title("Анализ рельсового покрытия")
@@ -64,7 +81,7 @@ if uploaded_file is not None and side is not None:
         st.info("Шаг 1 завершен!")
         
         cap.release()
-        cv2.destroyAllWindows()    
+        #cv2.destroyAllWindows()    
         
         
         #%% Analysis of the images by YOLO
@@ -74,7 +91,8 @@ if uploaded_file is not None and side is not None:
         Images_for_YOLO = os.listdir(temp_images_for_YOLO)
     
         Confidence = 0.7
-        model = YOLO('weights/best.pt')
+        
+        model = YOLO('best.pt')
         Results = []
     
         for image_path in Images_for_YOLO:
