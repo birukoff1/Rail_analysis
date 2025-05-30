@@ -84,6 +84,22 @@ if uploaded_file is not None and side is not None:
             # Analysis with YOLO5    
             Result = model(image_path, conf=Confidence)
             Results.append(Result)
+            
+            # Translation of the names
+            English_to_russian = {
+                "rolled-in scale": "Вкатанные чешуйки",
+                "patches": "Заплаты",
+                "crazing": "Трещины",
+                "pitted surface": "Шероховатая поверхность",
+                "inclusions": "Включения",
+                "scratches": "Царапины"
+            }
+            
+            Russian_names = {}
+            for idx, name in Result[0].names.items():
+                Russian_names[idx] = English_to_russian.get(name, name)
+            
+            Result[0].names = Russian_names
     
             # Visualization of the defects
             boxes = Result[0].boxes
@@ -97,9 +113,7 @@ if uploaded_file is not None and side is not None:
                     Annotated_img = Result[0].plot()
                     
                     st.image(Annotated_img, caption=f"Кадр: №{image_path.split('_')[-4]}, Метка времени: {image_path.split('_')[-2]}", use_container_width=True)
-                    
-                # else:
-                #     st.info(f"{image_path[image_path.index('/')+1:]} не имеет дефектов")
+
         
         st.info("Шаг 2 завершен!")
         st.success("Анализ видео успешно завершен!")
